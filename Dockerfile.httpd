@@ -1,0 +1,7 @@
+FROM httpd:2.4
+
+
+# acest rand nu este necesar pentru ca va face update la librarii si va mari voluml imaginii.
+# RUN apt update && apt upgrade -y
+
+COPY ./files/httpd/httpd.conf /usr/local/apache2/conf/httpd.conf

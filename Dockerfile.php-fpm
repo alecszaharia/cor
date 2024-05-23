@@ -1,0 +1,17 @@
+FROM php:8.1-fpm
+
+RUN apt-get update && apt-get upgrade -y && apt-get install -y \
+		libzip-dev libfreetype6-dev libjpeg62-turbo-dev libmcrypt-dev \
+		libpng-dev libicu-dev libpq-dev libonig-dev libssl-dev unzip
+
+RUN rm -rf /var/lib/apt/lists/* /tmp/*
+		
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg
+RUN docker-php-ext-install -j$(nproc) gd pdo_mysql
+
+RUN pecl install xdebug-3.1.5 && docker-php-ext-enable xdebug \
+    && echo "xdebug.mode=debug" >> $PHP_INI_DIR/conf.d/xdebug.ini \
+    && echo "xdebug.discover_client_host=true" >> $PHP_INI_DIR/conf.d/xdebug.ini \
+    && echo "xdebug.start_with_request=trigger" >> $PHP_INI_DIR/conf.d/xdebug.ini
+
+WORKDIR /var/www/html

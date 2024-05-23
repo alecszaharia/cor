@@ -1,0 +1,4 @@
+database/*
+site/vendor
+site/logs
+site/var/cache

@@ -1,0 +1,38 @@
+version: '3.9'
+
+services:
+  httpd:
+    build:
+      context: ./
+      dockerfile: Dockerfile.httpd
+    networks:
+      - internal
+    ports:
+      - "80:80"
+    volumes:
+      - "./site/:/var/www/html/"
+  php-fpm:
+    build:
+      context: ./
+      dockerfile: Dockerfile.php-fpm
+    networks:
+      - internal
+    volumes:
+      - "./site/:/var/www/html/"
+  mariadb:
+    image: mariadb:10.8
+    # fososec direct imaginea pentru ca nu avem nici o configurare a imagini.. si Dockerfile special pentru mariadb nu este nevoie.
+    #build: 
+    #  context: ./
+    #  dockerfile: Dockerfile.mariadb
+    networks:
+      - internal
+    environment:
+     MARIADB_DATABASE: database
+     MARIADB_USER: database_user
+     MARIADB_PASSWORD: database_pwd
+     MARIADB_ROOT_PASSWORD: rootpassword
+    volumes:
+      - "./database/:/var/lib/mysql"
+networks:
+  internal: {}
